@@ -1,0 +1,87 @@
+package com.from1115.crm.domain;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+/**
+ * 
+ * @TableName user
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+    /**
+     * 主键
+     */
+    private Long id;
+
+    /**
+     * 客户姓名
+     */
+    private String username;
+
+    /**
+     * 生日
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date birthday;
+
+    /**
+     * 1男0女
+     */
+    private String gender;
+
+    /**
+     * 手机
+     */
+    private String tel;
+
+    /**
+     * 工资
+     */
+    private Double sal;
+
+    /**
+     * 客户职业
+     */
+    private String profession;
+
+    /**
+     * 客户住址
+     */
+    private String address;
+
+    /**
+       备注
+     */
+    private String remark;
+
+    /**
+     * 部门编号
+     */
+//    private Long deptId;
+
+    /*客户对应的部门信息*/
+    private Dept dept;
+
+    /**
+     * 创建时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+}

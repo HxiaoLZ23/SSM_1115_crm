@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.from1115.crm.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.from1115.crm.domain.User">
+            <id property="id" column="id" />
+            <result property="username" column="username" />
+            <result property="birthday" column="birthday" />
+            <result property="gender" column="gender" />
+            <result property="tel" column="tel" />
+            <result property="sal" column="sal" />
+            <result property="profession" column="profession" />
+            <result property="address" column="address" />
+            <result property="remark" column="remark" />
+<!--            <result property="deptId" column="dept_id" />-->
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+        <!--一对一结果封装-->
+            <association property="dept" javaType="com.from1115.crm.domain.Dept">
+                <result property="name" column="name"/>
+                <result property="local" column="local"/>
+            </association>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        (id,username,birthday,gender,tel,sal,
+        profession,address,remark,dept_id,create_time,
+        update_time)
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where  id = #{id} 
+    </select>
+    <!-- 查询部门是否存在 -->
+    <select id="selectDeptIsExist" resultType="java.lang.Integer">
+        select count(id) from dept where id = #{deptId};
+    </select>
+
+    <!--分页查询客户信息-->
+    <select id="selectUsersBypage" resultMap="BaseResultMap">
+        SELECT u.*,d.name,d.loc FROM USER u INNER JOIN dept d ON u.dept_id =  d.id
+    </select>
+    <!--查询客户是否已经添加-->
+    <select id="selectUserIsExist" resultType="java.lang.Integer">
+        select count(id)
+        from
+            user
+                where
+                    username = #{username}
+                and
+                    birthday = #{birthday}
+                and
+                    address = #{address}
+                and
+                    gender = #{gender}
+    </select>
+   
+
+
+    <insert id="insertUser"  parameterType="com.from1115.crm.dto.UserDto" >
+        insert into user
+        (username,birthday,gender,tel,sal,
+        profession,address,remark,dept_id,create_time,
+        update_time)
+        values (#{username},#{birthday},#{gender},#{tel},#{sal},
+        #{profession},#{address},#{remark},#{deptId},#{createTime},
+        #{updateTime})
+    </insert>
+
+</mapper>
