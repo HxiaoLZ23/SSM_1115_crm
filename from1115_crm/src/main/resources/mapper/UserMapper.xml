@@ -41,10 +41,58 @@
         select count(id) from dept where id = #{deptId};
     </select>
 
+    <!-- 动态搜索客户信息 -->
+    <select id="selectUserBySearch" parameterType="com.from1115.crm.dto.UserSearchDto" resultMap="BaseResultMap">
+        SELECT u.*, d.name, d.loc
+        FROM USER u
+        INNER JOIN dept d ON u.`dept_id` = d.`id`
+        <where>
+            <if test="username!=null and username!=''">
+                u.username = #{username}
+            </if>
+            <if test="tel!=null and tel!=''">
+                AND u.tel = #{tel}
+            </if>
+            <if test="deptName!=null and deptName!=''">
+                AND d.name = #{deptName}
+            </if>
+            <if test="gender!=null and gender!=''">
+                AND u.gender = #{gender}
+            </if>
+
+        </where>
+    </select>
+
+    <!-- 根据id修改客户信息 -->
+    <update id="updateUserById" parameterType="com.from1115.crm.dto.UserDto">
+        UPDATE USER SET
+                        username = #{username},
+                        birthday = #{birthday},
+                        gender = #{gender},
+                        tel = #{tel},
+                        sal = #{sal},
+                        profession = #{profession},
+                        address = #{address},
+                        remark = #{remark},
+                        dept_id = #{deptId}
+        WHERE id = #{id}
+    </update>
+
     <!--分页查询客户信息-->
     <select id="selectUsersBypage" resultMap="BaseResultMap">
         SELECT u.*,d.name,d.loc FROM USER u INNER JOIN dept d ON u.dept_id =  d.id
     </select>
+
+    <!-- 根据id删除单个客户的信息 -->
+    <delete id="deleteUserById" parameterType="Long">
+        DELETE FROM USER WHERE id = #{id}
+    </delete>
+
+    <!-- 根据ID删除多个用户信息 -->
+    <delete id="deleteManyUser" parameterType="String">
+        DELETE FROM USER WHERE id IN (${id})
+    </delete>
+
     <!--查询客户是否已经添加-->
     <select id="selectUserIsExist" resultType="java.lang.Integer">
         select count(id)

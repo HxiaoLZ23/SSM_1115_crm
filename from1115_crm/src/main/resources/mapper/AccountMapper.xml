@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.from1115.crm.mapper.AccountMapper">
+
+    <resultMap id="BaseResultMap" type="com.from1115.crm.domain.Account">
+            <id property="id" column="id" />
+            <result property="username" column="username" />
+            <result property="pwd" column="pwd" />
+            <result property="imgUrl" column="img_url" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,pwd,img_url,create_time,update_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from account
+        where  id = #{id} 
+    </select>
+    <select id="Login" resultType="com.from1115.crm.domain.Account"></select>
+    <select id="selectAccountsList" resultType="com.from1115.crm.domain.Account">
+      select
+          <include refid="Base_Column_List"/>
+
+      from
+          account
+
+    </select>
+    <select id="selectAccountByUserName" resultType="com.from1115.crm.domain.Account">
+        select
+        <include refid="Base_Column_List"/>
+
+        from
+        account
+        where username=#{arg0}
+
+
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from account
+        where  id = #{id} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="String">
+        insert into account
+        ( username,pwd,img_url,create_time,update_time)
+        values (,#{arg0},'e10adc3949ba59abbe56e057f20f883epwd',now(),#{updateTime})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.from1115.crm.domain.Account" useGeneratedKeys="true">
+        insert into account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="username != null">username,</if>
+                <if test="pwd != null">pwd,</if>
+                <if test="imgUrl != null">img_url,</if>
+                <if test="createTime != null">create_time,</if>
+                <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id},</if>
+                <if test="username != null">#{username},</if>
+                <if test="pwd != null">#{pwd},</if>
+                <if test="imgUrl != null">#{imgUrl},</if>
+                <if test="createTime != null">#{createTime},</if>
+                <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.from1115.crm.domain.Account">
+        update account
+        <set>
+                <if test="username != null">
+                    username = #{username},
+                </if>
+                <if test="pwd != null">
+                    pwd = #{pwd},
+                </if>
+                <if test="imgUrl != null">
+                    img_url = #{imgUrl},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+        </set>
+        where   id = #{id} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.from1115.crm.domain.Account">
+        update account
+        set 
+            username =  #{username},
+            pwd =  #{pwd},
+            img_url =  #{imgUrl},
+            create_time =  #{createTime},
+            update_time =  #{updateTime}
+        where   id = #{id} 
+    </update>
+    <update id="updateResetAccountPwd" parameterType='long'>
+
+        update account
+        set
+
+            pwd =  'e10adc3949ba59abbe56e057f20f883epwd'
+        update_time=now()
+        where   id = #{id}
+
+    </update>
+
+
+</mapper>

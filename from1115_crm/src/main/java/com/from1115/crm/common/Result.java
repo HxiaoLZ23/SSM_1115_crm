@@ -24,4 +24,6 @@ public class Result {
         this.code = code;
         this.msg = msg;
     }
+
+    public static final Result DATE_FORMAT_ERROR = new Result(-1,"参数有误");
 }

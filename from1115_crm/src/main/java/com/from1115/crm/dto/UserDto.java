@@ -14,6 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 
 public class UserDto implements Serializable {
+    /**
+     * 客户ID
+     */
+    private Long id;
 
     /**
      * 客户姓名

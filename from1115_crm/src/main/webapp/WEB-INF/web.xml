@@ -5,7 +5,7 @@
          version="6.0">
     <!-- 设置默认首页 -->
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>/views/login.html</welcome-file>
     </welcome-file-list>
 
 
@@ -43,6 +43,8 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+
     <servlet-mapping>
         <servlet-name>crm</servlet-name>
         <url-pattern>*.do</url-pattern>

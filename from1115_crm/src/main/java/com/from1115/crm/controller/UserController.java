@@ -2,6 +2,7 @@ package com.from1115.crm.controller;
 
 import com.from1115.crm.common.Result;
 import com.from1115.crm.dto.UserDto;
+import com.from1115.crm.dto.UserSearchDto;
 import com.from1115.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -29,5 +30,32 @@ public class UserController {
     public Result getUsersBypage(@RequestParam(required = false,defaultValue = "1") Integer pageNum,@RequestParam(required = false,defaultValue = "10") Integer pageSize){
 
         return userService.findUsersBypage(pageNum,pageSize);
+    }
+
+    @DeleteMapping("/cutOneUser.do")
+    public Result cutOneUser(Long id) {
+        return userService.removeUserById(id);
+    }
+
+    @DeleteMapping("/cutManyUser.do")
+    public Result cutManyUser(String id) {
+        return userService.removeManyUser(id);
+    }
+
+    @GetMapping("/getUsersBySearch.do")
+    public Result getUsersBySearch(@Valid UserSearchDto userSearchDto, BindingResult br) {
+        if (br.hasErrors()) {
+            return new Result( -1, br.getFieldError().getDefaultMessage());
+        }
+        return userService.findUserBySearch(userSearchDto);
+    }
+
+    @PutMapping("/editUser.do")
+    public Result editUserById(@Valid UserDto userDto, BindingResult br) {
+        if (br.hasErrors()) {
+            return new Result(-1, br.getFieldError().getDefaultMessage());
+        }
+
+        return userService.modifyUserById(userDto);
     }
 }

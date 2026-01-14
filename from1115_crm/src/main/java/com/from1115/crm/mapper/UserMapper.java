@@ -2,6 +2,7 @@ package com.from1115.crm.mapper;
 
 import com.from1115.crm.domain.User;
 import com.from1115.crm.dto.UserDto;
+import com.from1115.crm.dto.UserSearchDto;
 
 import java.util.List;
 
@@ -29,5 +30,27 @@ public interface UserMapper {
     List<User> selectUsersBypage();
 
 
+    /**
+     * 根据id删除单个客户信息
+     * @param id 被删除的客户id
+     * @return 受影响的行数
+     */
+    int deleteUserById(Long id);
+
+    /**
+     * 根据ID删除多个用户
+     * @param id 多个ID
+     * @return 受影响的行数
+     */
+    int deleteManyUser(String id);
+
+    /**
+     * 动态搜索客户名称
+     * @param userSearchDto 搜索参数
+     * @return
+     */
+    List<User> selectUserBySearch(UserSearchDto userSearchDto);
+
+    int updateUserById(UserDto userDto);
 
 }
