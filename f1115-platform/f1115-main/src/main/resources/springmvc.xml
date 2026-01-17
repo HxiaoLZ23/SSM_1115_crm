@@ -76,8 +76,10 @@
             <!-- 排除登录注册接口 -->
             <mvc:exclude-mapping path="/api/user/login"/>
             <mvc:exclude-mapping path="/api/user/register"/>
-            <mvc:exclude-mapping path="/api/post/timeline"/>
-            <mvc:exclude-mapping path="/api/post/*"/>
+            <!-- 排除帖子查看接口（允许未登录用户查看） -->
+            <mvc:exclude-mapping path="/api/post/list"/>
+            <mvc:exclude-mapping path="/api/post/*/"/>
+            <mvc:exclude-mapping path="/api/post/user/*"/>
             <bean class="com.form1115.f1115.main.interceptor.AuthInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

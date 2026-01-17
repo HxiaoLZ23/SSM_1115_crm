@@ -27,8 +27,26 @@ const routes = [
   {
     path: '/profile',
     name: 'Profile',
+    redirect: to => {
+      // 重定向到当前用户的主页
+      const userStore = useUserStore()
+      if (userStore.currentUser) {
+        return `/user/${userStore.currentUser.id}`
+      }
+      return '/login'
+    }
+  },
+  {
+    path: '/user/:userId',
+    name: 'UserProfile',
     component: () => import('@/views/Profile.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/post/:postId',
+    name: 'PostDetail',
+    component: () => import('@/views/PostDetail.vue'),
+    meta: { requiresAuth: false }
   }
 ]
 
@@ -38,8 +56,14 @@ const router = createRouter({
 })
 
 // 路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
+  
+  // 如果有本地存储的用户信息，但还没验证过，先验证一下
+  if (userStore.currentUser && to.meta.requiresAuth) {
+    // 验证Session是否有效
+    await userStore.fetchUserProfile()
+  }
   
   if (to.meta.requiresAuth && !userStore.isLoggedIn) {
     // 需要登录但未登录，跳转到登录页

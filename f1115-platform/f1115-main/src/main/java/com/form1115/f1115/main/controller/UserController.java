@@ -167,4 +167,25 @@ public class UserController {
         
         return Result.success(user);
     }
+    
+    /**
+     * 上传头像
+     */
+    @PostMapping("/avatar")
+    public Result uploadAvatar(@RequestParam("file") org.springframework.web.multipart.MultipartFile file, 
+                               HttpSession session) {
+        UserProfile currentUser = (UserProfile) session.getAttribute(SESSION_USER_KEY);
+        if (currentUser == null) {
+            return Result.unauthorized();
+        }
+        
+        // 上传文件并更新头像
+        String avatarUrl = userService.updateAvatar(currentUser.getId(), file);
+        
+        // 更新Session中的用户信息
+        currentUser.setAvatar(avatarUrl);
+        session.setAttribute(SESSION_USER_KEY, currentUser);
+        
+        return Result.success("头像上传成功", avatarUrl);
+    }
 }

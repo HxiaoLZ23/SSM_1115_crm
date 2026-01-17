@@ -73,3 +73,20 @@ export function getUserInfo(userId) {
     method: 'get'
   })
 }
+
+/**
+ * 上传头像
+ */
+export function uploadAvatar(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  
+  return request({
+    url: '/user/avatar',
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}

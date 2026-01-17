@@ -7,6 +7,7 @@ import com.form1115.f1115.main.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户服务类
@@ -16,6 +17,9 @@ public class UserService {
     
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private FileUploadService fileUploadService;
     
     /**
      * 用户注册
@@ -134,5 +138,28 @@ public class UserService {
         if (result <= 0) {
             throw new BusinessException("修改密码失败");
         }
+    }
+    
+    /**
+     * 更新头像
+     */
+    @Transactional
+    public String updateAvatar(Long userId, MultipartFile file) {
+        // 1. 验证用户存在
+        UserProfile user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        
+        // 2. 上传文件
+        String avatarUrl = fileUploadService.uploadImage(file);
+        
+        // 3. 更新数据库
+        int result = userMapper.updateAvatar(userId, avatarUrl);
+        if (result <= 0) {
+            throw new BusinessException("更新头像失败");
+        }
+        
+        return avatarUrl;
     }
 }

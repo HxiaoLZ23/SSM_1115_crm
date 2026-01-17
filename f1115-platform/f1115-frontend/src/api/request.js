@@ -5,7 +5,7 @@ import router from '@/router'
 // 创建axios实例
 const request = axios.create({
   baseURL: '/api',
-  timeout: 10000,
+  timeout: 30000, // 增加超时时间，图片上传可能较慢
   withCredentials: true // 携带cookie
 })
 
