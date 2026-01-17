@@ -56,22 +56,30 @@ f1115-platform/
 
 ### 2. 配置修改
 
-修改配置文件 `f1115-main/src/main/resources/db.properties`：
+**重要**：首次使用需要创建配置文件
 
-```properties
-# 数据库配置（根据实际情况修改）
-jdbc.url=jdbc:mysql://localhost:3306/f1115_db?...
-jdbc.username=root
-jdbc.password=123456
+1. 复制配置模板：
+   ```bash
+   cd f1115-main/src/main/resources/
+   cp db.properties.example db.properties
+   ```
 
-# Redis配置（根据实际情况修改）
-redis.host=localhost
-redis.port=6379
-redis.password=
+2. 修改 `db.properties`，填入你的真实配置：
+   ```properties
+   # 数据库配置（根据实际情况修改）
+   jdbc.username=root
+   jdbc.password=YOUR_MYSQL_PASSWORD
+   
+   # Redis配置（根据实际情况修改）
+   redis.host=localhost
+   redis.port=6379
+   redis.password=YOUR_REDIS_PASSWORD
+   
+   # 通义千问API配置（需要申请API Key）
+   dashscope.apiKey=YOUR_DASHSCOPE_API_KEY
+   ```
 
-# 通义千问API配置（需要申请API Key）
-dashscope.apiKey=YOUR_DASHSCOPE_API_KEY
-```
+**注意**：`db.properties` 已添加到 `.gitignore`，不会被提交到Git。详见 [CONFIG_GUIDE.md](CONFIG_GUIDE.md)
 
 ### 3. 后端启动（在IDEA中操作）
 

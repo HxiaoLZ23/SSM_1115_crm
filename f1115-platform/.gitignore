@@ -41,7 +41,9 @@ logs/
 upload/
 
 # 配置文件（包含敏感信息）
+**/db.properties
 **/db.properties.prod
+**/db.properties.local
 
 # 操作系统
 .DS_Store

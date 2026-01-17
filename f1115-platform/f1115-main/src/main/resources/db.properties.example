@@ -1,12 +1,13 @@
 # =============================================
-# F1115 数据库配置文件
+# F1115 数据库配置文件模板
+# 使用说明：复制此文件为 db.properties 并填入真实配置
 # =============================================
 
 # MySQL数据库配置
 jdbc.driverClassName=com.mysql.cj.jdbc.Driver
 jdbc.url=jdbc:mysql://localhost:3306/f1115_db?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
 jdbc.username=root
-jdbc.password=hbl20040505
+jdbc.password=YOUR_MYSQL_PASSWORD
 
 # Druid连接池配置
 jdbc.initialSize=5
