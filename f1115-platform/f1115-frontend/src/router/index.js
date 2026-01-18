@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 
 const routes = [
@@ -47,6 +48,33 @@ const routes = [
     name: 'PostDetail',
     component: () => import('@/views/PostDetail.vue'),
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/admin',
+    component: () => import('@/views/admin/AdminLayout.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'AdminDashboard',
+        component: () => import('@/views/admin/Dashboard.vue')
+      },
+      {
+        path: 'users',
+        name: 'AdminUsers',
+        component: () => import('@/views/admin/UserManage.vue')
+      },
+      {
+        path: 'posts',
+        name: 'AdminPosts',
+        component: () => import('@/views/admin/PostManage.vue')
+      },
+      {
+        path: 'comments',
+        name: 'AdminComments',
+        component: () => import('@/views/admin/CommentManage.vue')
+      }
+    ]
   }
 ]
 
@@ -68,6 +96,14 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth && !userStore.isLoggedIn) {
     // 需要登录但未登录，跳转到登录页
     next('/login')
+  } else if (to.meta.requiresAdmin) {
+    // 需要管理员权限
+    if (!userStore.currentUser || userStore.currentUser.role !== 1) {
+      ElMessage.error('需要管理员权限')
+      next('/home')
+      return
+    }
+    next()
   } else if ((to.path === '/login' || to.path === '/register') && userStore.isLoggedIn) {
     // 已登录用户访问登录/注册页，跳转到首页
     next('/home')

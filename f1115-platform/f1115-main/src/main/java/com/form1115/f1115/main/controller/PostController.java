@@ -3,6 +3,7 @@ package com.form1115.f1115.main.controller;
 import com.form1115.f1115.common.domain.Post;
 import com.form1115.f1115.common.domain.UserProfile;
 import com.form1115.f1115.common.utils.Result;
+import com.form1115.f1115.main.service.AICommentService;
 import com.form1115.f1115.main.service.PostService;
 import com.form1115.f1115.main.service.LikeService;
 import com.github.pagehelper.PageInfo;
@@ -26,6 +27,9 @@ public class PostController {
     @Autowired
     private LikeService likeService;
     
+    @Autowired
+    private AICommentService aiCommentService;
+    
     private static final String SESSION_USER_KEY = "currentUser";
     
     /**
@@ -48,6 +52,16 @@ public class PostController {
         
         // 发布帖子
         Post post = postService.createPost(currentUser.getId(), content, images);
+        
+        // 异步触发AI评论（不阻塞用户）
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000); // 延迟3秒再评论
+                aiCommentService.commentOnNewPost(post.getId());
+            } catch (Exception e) {
+                // 忽略错误
+            }
+        }).start();
         
         return Result.success("发布成功", post);
     }

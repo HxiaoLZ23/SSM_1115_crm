@@ -26,6 +26,12 @@
             <div class="user-info">
               <div class="nickname clickable-name" @click="goToUserProfile(post.userId)">
                 {{ post.user?.nickname || post.user?.username }}
+                <el-tag v-if="post.user?.role === 1" type="danger" size="small" style="margin-left: 8px">
+                  管理员
+                </el-tag>
+                <el-tag v-if="post.user?.role === 2" type="success" size="small" style="margin-left: 8px">
+                  AI助手
+                </el-tag>
               </div>
               <div class="time">{{ formatTime(post.createTime) }}</div>
             </div>
@@ -125,6 +131,8 @@
                 <div class="comment-info">
                   <div class="comment-user clickable-name" @click="goToUserProfile(comment.userId)">
                     {{ comment.user?.nickname || comment.user?.username }}
+                    <el-tag v-if="comment.user?.role === 1" type="danger" size="small" style="margin-left: 5px">管理员</el-tag>
+                    <el-tag v-if="comment.user?.role === 2" type="success" size="small" style="margin-left: 5px">AI</el-tag>
                   </div>
                   <div class="comment-time">{{ formatTime(comment.createTime) }}</div>
                 </div>

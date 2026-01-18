@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.form1115.f1115.admin.mapper.AdminPostMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.form1115.f1115.common.domain.Post">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="images" property="images"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <association property="user" javaType="com.form1115.f1115.common.domain.UserProfile">
+            <id column="user_id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="nickname" property="nickname"/>
+            <result column="avatar" property="avatar"/>
+            <result column="role" property="role"/>
+        </association>
+    </resultMap>
+
+    <!-- 查询帖子列表 -->
+    <select id="selectPostList" resultMap="BaseResultMap">
+        SELECT p.*, u.username, u.nickname, u.avatar, u.role
+        FROM post p
+        LEFT JOIN user_profile u ON p.user_id = u.id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND p.content LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="status != null">
+                AND p.status = #{status}
+            </if>
+            <if test="type != null">
+                AND p.type = #{type}
+            </if>
+        </where>
+        ORDER BY p.create_time DESC
+    </select>
+
+    <!-- 删除帖子 -->
+    <update id="deletePost">
+        UPDATE post
+        SET status = 0
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新帖子类型 -->
+    <update id="updatePostType">
+        UPDATE post
+        SET type = #{type}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新帖子状态 -->
+    <update id="updatePostStatus">
+        UPDATE post
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 统计帖子总数 -->
+    <select id="countTotalPosts" resultType="int">
+        SELECT COUNT(*)
+        FROM post
+        WHERE status != 0
+    </select>
+
+    <!-- 统计今日新增帖子 -->
+    <select id="countTodayNewPosts" resultType="int">
+        SELECT COUNT(*)
+        FROM post
+        WHERE DATE(create_time) = CURDATE()
+    </select>
+
+    <!-- 查询热门帖子 -->
+    <select id="selectHotPosts" resultMap="BaseResultMap">
+        SELECT p.*, u.username, u.nickname, u.avatar
+        FROM post p
+        LEFT JOIN user_profile u ON p.user_id = u.id
+        WHERE p.status = 1
+        ORDER BY p.like_count DESC, p.view_count DESC
+        LIMIT 10
+    </select>
+
+</mapper>

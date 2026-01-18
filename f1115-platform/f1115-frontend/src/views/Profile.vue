@@ -34,7 +34,11 @@
             
             <!-- 用户信息 -->
             <div class="user-details">
-              <h2>{{ userInfo.nickname || userInfo.username }}</h2>
+              <h2>
+                {{ userInfo.nickname || userInfo.username }}
+                <el-tag v-if="userInfo.role === 1" type="danger" style="margin-left: 10px">管理员</el-tag>
+                <el-tag v-if="userInfo.role === 2" type="success" style="margin-left: 10px">AI助手</el-tag>
+              </h2>
               <p class="username">@{{ userInfo.username }}</p>
               <p class="bio">{{ userInfo.bio || '这个人很懒，什么都没写...' }}</p>
               

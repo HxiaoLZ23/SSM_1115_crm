@@ -25,6 +25,7 @@
             <result column="comment_username" property="username"/>
             <result column="comment_nickname" property="nickname"/>
             <result column="comment_avatar" property="avatar"/>
+            <result column="comment_user_role" property="role"/>
         </association>
         <association property="parentComment" javaType="com.form1115.f1115.common.domain.Comment">
             <id column="parent_comment_id" property="id"/>
@@ -132,6 +133,21 @@
         LEFT JOIN user_profile pu ON pc.user_id = pu.id
         WHERE c.post_id = #{postId} AND c.status = 1
         ORDER BY c.parent_id ASC, c.create_time ASC
+    </select>
+
+    <!-- 查询所有评论（管理后台用） -->
+    <select id="selectAllComments" resultMap="DetailResultMap">
+        SELECT 
+            c.*,
+            u.id as comment_user_id,
+            u.username as comment_username,
+            u.nickname as comment_nickname,
+            u.avatar as comment_avatar,
+            u.role as comment_user_role
+        FROM comment c
+        LEFT JOIN user_profile u ON c.user_id = u.id
+        WHERE c.status = 1
+        ORDER BY c.create_time DESC
     </select>
 
 </mapper>

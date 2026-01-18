@@ -3,6 +3,7 @@ package com.form1115.f1115.main.controller;
 import com.form1115.f1115.common.domain.Comment;
 import com.form1115.f1115.common.domain.UserProfile;
 import com.form1115.f1115.common.utils.Result;
+import com.form1115.f1115.main.service.AICommentService;
 import com.form1115.f1115.main.service.CommentService;
 import com.form1115.f1115.main.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CommentController {
     
     @Autowired
     private LikeService likeService;
+    
+    @Autowired
+    private AICommentService aiCommentService;
     
     private static final String SESSION_USER_KEY = "currentUser";
     
@@ -50,6 +54,18 @@ public class CommentController {
         
         // 发布评论
         Comment comment = commentService.createComment(postId, currentUser.getId(), content, parentId);
+        
+        // 如果是回复AI的评论，异步触发AI回复
+        if (parentId != null) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000); // 延迟2秒再回复
+                    aiCommentService.replyToComment(comment.getId());
+                } catch (Exception e) {
+                    // 忽略错误
+                }
+            }).start();
+        }
         
         return Result.success("评论成功", comment);
     }

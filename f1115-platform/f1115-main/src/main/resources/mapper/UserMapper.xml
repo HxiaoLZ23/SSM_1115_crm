@@ -94,4 +94,39 @@
         WHERE u.id = #{id}
     </select>
 
+    <!-- 查询用户列表（管理后台用） -->
+    <select id="selectUserList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user_profile
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (username LIKE CONCAT('%', #{keyword}, '%')
+                OR nickname LIKE CONCAT('%', #{keyword}, '%')
+                OR email LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 统计用户总数 -->
+    <select id="countTotalUsers" resultType="int">
+        SELECT COUNT(*) FROM user_profile
+    </select>
+
+    <!-- 统计今日新增用户 -->
+    <select id="countTodayNewUsers" resultType="int">
+        SELECT COUNT(*) FROM user_profile
+        WHERE DATE(create_time) = CURDATE()
+    </select>
+
+    <!-- 统计活跃用户数 -->
+    <select id="countActiveUsers" resultType="int">
+        SELECT COUNT(DISTINCT user_id)
+        FROM (
+            SELECT user_id FROM post WHERE create_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+            UNION
+            SELECT user_id FROM comment WHERE create_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        ) AS active_users
+    </select>
+
 </mapper>

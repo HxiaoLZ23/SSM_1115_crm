@@ -7,6 +7,13 @@
           <h1>F1115 社交平台</h1>
           <div class="user-info">
             <span>欢迎，{{ userStore.currentUser?.nickname || userStore.currentUser?.username }}</span>
+            <el-button 
+              v-if="userStore.currentUser?.role === 1" 
+              type="danger" 
+              @click="router.push('/admin/dashboard')"
+            >
+              管理后台
+            </el-button>
             <el-button type="primary" @click="router.push('/profile')">个人中心</el-button>
             <el-button @click="handleLogout">退出登录</el-button>
           </div>
@@ -78,6 +85,12 @@
                   <div class="user-info">
                     <div class="nickname clickable-name" @click.stop="goToUserProfile(post.userId)">
                       {{ post.user?.nickname || post.user?.username }}
+                      <el-tag v-if="post.user?.role === 1" type="danger" size="small" style="margin-left: 5px">
+                        管理员
+                      </el-tag>
+                      <el-tag v-if="post.user?.role === 2" type="success" size="small" style="margin-left: 5px">
+                        AI
+                      </el-tag>
                     </div>
                     <div class="time">{{ formatTime(post.createTime) }}</div>
                   </div>

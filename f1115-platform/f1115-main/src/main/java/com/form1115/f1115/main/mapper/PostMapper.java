@@ -69,4 +69,19 @@ public interface PostMapper {
      * 查询帖子详情（包含用户信息和点赞状态）
      */
     Post selectDetailById(@Param("id") Long id, @Param("currentUserId") Long currentUserId);
+    
+    /**
+     * 统计帖子总数
+     */
+    int countTotalPosts();
+    
+    /**
+     * 统计今日新增帖子
+     */
+    int countTodayNewPosts();
+    
+    /**
+     * 查询热门帖子
+     */
+    List<Post> selectHotPosts();
 }

@@ -3,6 +3,8 @@ package com.form1115.f1115.main.mapper;
 import com.form1115.f1115.common.domain.UserProfile;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 用户Mapper接口
  */
@@ -47,4 +49,24 @@ public interface UserMapper {
      * 查询用户统计信息（关注数、粉丝数、发帖数）
      */
     UserProfile selectUserWithStats(@Param("id") Long id, @Param("currentUserId") Long currentUserId);
+    
+    /**
+     * 查询用户列表（管理后台用）
+     */
+    List<UserProfile> selectUserList(@Param("keyword") String keyword);
+    
+    /**
+     * 统计用户总数
+     */
+    int countTotalUsers();
+    
+    /**
+     * 统计今日新增用户
+     */
+    int countTodayNewUsers();
+    
+    /**
+     * 统计活跃用户数
+     */
+    int countActiveUsers();
 }

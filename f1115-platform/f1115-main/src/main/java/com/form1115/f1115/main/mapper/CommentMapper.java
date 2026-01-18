@@ -54,4 +54,9 @@ public interface CommentMapper {
      * 查询帖子的评论列表（包含用户信息和回复）
      */
     List<Comment> selectCommentsByPostId(@Param("postId") Long postId, @Param("currentUserId") Long currentUserId);
+    
+    /**
+     * 查询所有评论（管理后台用）
+     */
+    List<Comment> selectAllComments();
 }
