@@ -139,3 +139,4 @@ public class CommentService {
         postMapper.decrementLikeCount(comment.getPostId());
     }
 }
+
